@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureContext Protocol - Authentication Proxy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .connection-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .oauth-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .oauth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .google-button {
+            background: #4285f4;
+            color: white;
+        }
+
+        .google-button:hover {
+            background: #3367d6;
+        }
+
+        .microsoft-button {
+            background: #00a1f1;
+            color: white;
+        }
+
+        .microsoft-button:hover {
+            background: #0078d4;
+        }
+
+        .provider-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .status-area {
+            min-height: 60px;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-area.show {
+            display: block;
+        }
+
+        .status-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .status-message {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .session-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            color: #495057;
+            word-break: break-all;
+        }
+
+        .footer {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .oauth-button {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SecureContext Protocol</h1>
+            <p>Connect your accounts to enable secure, user-consented access for AI agents and applications.</p>
+        </div>
+
+        <!-- Status display area -->
+        <div id="statusArea" class="status-area">
+            <div id="statusTitle" class="status-title"></div>
+            <div id="statusMessage" class="status-message"></div>
+            <div id="sessionInfo" class="session-info" style="display: none;"></div>
+        </div>
+
+        <!-- OAuth connection buttons -->
+        <div class="connection-buttons">
+            <a href="/oauth/google/authorize" class="oauth-button google-button">
+                <svg class="provider-icon" viewBox="0 0 24 24">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Connect Google Account
+            </a>
+
+            <a href="/oauth/microsoft/authorize" class="oauth-button microsoft-button">
+                <svg class="provider-icon" viewBox="0 0 24 24">
+                    <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/>
+                </svg>
+                Connect Microsoft Account
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Your data remains secure and is only accessible with your explicit consent. Tokens are stored temporarily and cleared when the application restarts.</p>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * SecureContext Protocol UI JavaScript
+         * Handles URL parameter parsing and status display updates
+         */
+
+        // Parse URL parameters on page load
+        function parseURLParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                session_id: urlParams.get('session_id'),
+                error: urlParams.get('error'),
+                error_description: urlParams.get('error_description'),
+                status: urlParams.get('status')
+            };
+        }
+
+        // Display success message with session ID
+        function showSuccessStatus(sessionId) {
+            const statusArea = document.getElementById('statusArea');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusMessage = document.getElementById('statusMessage');
+            const sessionInfo = document.getElementById('sessionInfo');
+
+            statusArea.className = 'status-area status-success show';
+            statusTitle.textContent = '✅ Connection Successful!';
+            statusMessage.textContent = 'Your account has been successfully connected. You can now use this session ID to access your data through authorized applications.';
+            
+            sessionInfo.style.display = 'block';
+            sessionInfo.innerHTML = `<strong>Session ID:</strong><br>${sessionId}`;
+
+            // Scroll to status area
+            statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Display error message
+        function showErrorStatus(error, errorDescription) {
+            const statusArea = document.getElementById('statusArea');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusMessage = document.getElementById('statusMessage');
+            const sessionInfo = document.getElementById('sessionInfo');
+
+            statusArea.className = 'status-area status-error show';
+            sessionInfo.style.display = 'none';
+
+            // Handle different error types with user-friendly messages
+            switch (error) {
+                case 'access_denied':
+                    statusTitle.textContent = '❌ Authorization Cancelled';
+                    statusMessage.textContent = errorDescription || 'You cancelled the authorization process. Click a connection button above to try again.';
+                    break;
+                
+                case 'state_mismatch':
+                    statusTitle.textContent = '🔒 Security Error';
+                    statusMessage.textContent = errorDescription || 'A security validation failed. This may indicate a potential security issue. Please try connecting again.';
+                    break;
+                
+                case 'session_expired':
+                    statusTitle.textContent = '⏰ Session Expired';
+                    statusMessage.textContent = errorDescription || 'Your session has expired. Please try connecting again.';
+                    break;
+                
+                case 'token_exchange_failed':
+                    statusTitle.textContent = '🔄 Token Exchange Failed';
+                    statusMessage.textContent = errorDescription || 'Failed to exchange authorization code for access token. Please try again.';
+                    break;
+                
+                case 'oauth_config_error':
+                    statusTitle.textContent = '⚙️ Configuration Error';
+                    statusMessage.textContent = errorDescription || 'OAuth configuration error. Please contact support if this problem persists.';
+                    break;
+                
+                case 'network_error':
+                    statusTitle.textContent = '🌐 Network Error';
+                    statusMessage.textContent = errorDescription || 'Network connection failed. Please check your internet connection and try again.';
+                    break;
+                
+                case 'invalid_request':
+                    statusTitle.textContent = '❓ Invalid Request';
+                    statusMessage.textContent = errorDescription || 'The authorization request was invalid. Please try again.';
+                    break;
+                
+                case 'unauthorized_client':
+                    statusTitle.textContent = '🚫 Unauthorized Client';
+                    statusMessage.textContent = errorDescription || 'This application is not authorized. Please contact support.';
+                    break;
+                
+                case 'invalid_scope':
+                    statusTitle.textContent = '🔐 Invalid Permissions';
+                    statusMessage.textContent = errorDescription || 'Invalid permissions requested. Please contact support.';
+                    break;
+                
+                default:
+                    statusTitle.textContent = '⚠️ Connection Error';
+                    statusMessage.textContent = errorDescription || `An error occurred during authorization: ${error}. Please try again.`;
+                    break;
+            }
+
+            // Scroll to status area
+            statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Update page title based on status
+        function updatePageTitle(params) {
+            const baseTitle = 'SecureContext Protocol - Authentication Proxy';
+            
+            if (params.session_id && !params.error) {
+                document.title = `${baseTitle} - Connected`;
+            } else if (params.error) {
+                document.title = `${baseTitle} - Error`;
+            } else {
+                document.title = baseTitle;
+            }
+        }
+
+        // Add visual feedback for button interactions
+        function addButtonInteractions() {
+            const buttons = document.querySelectorAll('.oauth-button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Add loading state
+                    const originalText = this.innerHTML;
+                    const provider = this.classList.contains('google-button') ? 'Google' : 'Microsoft';
+                    
+                    this.innerHTML = `
+                        <svg class="provider-icon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+                                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                        Connecting to ${provider}...
+                    `;
+                    
+                    this.style.pointerEvents = 'none';
+                    this.style.opacity = '0.8';
+                    
+                    // Restore original state if user navigates back
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.pointerEvents = '';
+                        this.style.opacity = '';
+                    }, 10000);
+                });
+            });
+        }
+
+        // Add CSS for loading animation
+        function addLoadingStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Clear URL parameters after displaying status (optional, for cleaner URLs)
+        function clearURLParameters() {
+            if (window.history && window.history.replaceState) {
+                const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({ path: url }, '', url);
+            }
+        }
+
+        // Initialize the application
+        function initializeApp() {
+            console.log('SecureContext Protocol UI initializing...');
+            
+            // Parse URL parameters
+            const params = parseURLParameters();
+            console.log('URL parameters:', params);
+            
+            // Update page title
+            updatePageTitle(params);
+            
+            // Handle status display based on URL parameters
+            if (params.session_id && !params.error) {
+                // Success case - show session ID
+                showSuccessStatus(params.session_id);
+                
+                // Clear URL parameters after a delay to keep the URL clean
+                setTimeout(clearURLParameters, 3000);
+                
+            } else if (params.error) {
+                // Error case - show error message
+                showErrorStatus(params.error, params.error_description);
+                
+                // Clear URL parameters after a delay
+                setTimeout(clearURLParameters, 5000);
+            }
+            
+            // Add button interactions
+            addButtonInteractions();
+            
+            // Add loading styles
+            addLoadingStyles();
+            
+            console.log('SecureContext Protocol UI initialized successfully');
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', function(event) {
+            // Re-parse parameters if user navigates back
+            const params = parseURLParameters();
+            if (params.session_id || params.error) {
+                location.reload();
+            }
+        });
+
+        // Expose utility functions for debugging
+        window.SCPDebug = {
+            parseURLParameters,
+            showSuccessStatus,
+            showErrorStatus,
+            clearURLParameters
+        };
+    </script>
+</body>
+</html>
