@@ -1421,6 +1421,43 @@ def register_core_routes(app: Flask) -> None:
         
         return render_template('index.html', **context)
     
+    @app.route('/api/providers', methods=['GET'])
+    def get_providers_api():
+        """
+        Get available OAuth providers for the UI.
+        
+        Returns:
+            JSON response with provider information
+        """
+        try:
+            providers = []
+            
+            if hasattr(app, 'provider_manager'):
+                provider_info = app.provider_manager.get_provider_info()
+                providers = [
+                    {
+                        "name": provider["name"],
+                        "display_name": provider["display_name"],
+                        "enabled": provider.get("enabled", True)
+                    }
+                    for provider in provider_info
+                ]
+            
+            response_data = APIResponse.success({
+                "providers": providers
+            })
+            
+            return create_flask_response(response_data, 200)
+            
+        except Exception as e:
+            app.logger.error(f"Error getting providers: {e}")
+            response_data = APIResponse.error(
+                ErrorCodes.INTERNAL_ERROR,
+                "Failed to load providers",
+                status_code=500
+            )
+            return create_flask_response(response_data, 500)
+    
     @app.route('/api/sessions', methods=['GET'])
     def get_sessions():
         """

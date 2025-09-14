@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,109 +14,94 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0f0f0f;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            color: #e5e5e5;
         }
 
         .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 500px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 48px;
+            max-width: 420px;
             width: 100%;
             text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .header {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
-            color: #333;
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.5;
+            color: #a0a0a0;
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         .connection-buttons {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
         .oauth-button {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            padding: 16px 24px;
-            border: 2px solid transparent;
+            gap: 10px;
+            padding: 14px 20px;
+            border: 1px solid #333;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 400;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
+            background: #262626;
+            color: #e5e5e5;
         }
 
         .oauth-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #333;
+            border-color: #444;
+            transform: translateY(-1px);
         }
 
-        /* Dynamic provider button styles */
+        /* Minimalist provider button styles */
         .provider-button {
-            background: #6c757d;
-            color: white;
+            background: #262626;
+            color: #e5e5e5;
         }
 
         .provider-button:hover {
-            background: #5a6268;
-        }
-
-        /* Specific provider colors */
-        .provider-google {
-            background: #4285f4;
-        }
-
-        .provider-google:hover {
-            background: #3367d6;
-        }
-
-        .provider-microsoft {
-            background: #00a1f1;
-        }
-
-        .provider-microsoft:hover {
-            background: #0078d4;
-        }
-
-        .provider-github {
             background: #333;
         }
 
-        .provider-github:hover {
-            background: #24292e;
+        /* Subtle provider accent colors */
+        .provider-google:hover {
+            border-color: #4285f4;
+            box-shadow: 0 0 0 1px rgba(66, 133, 244, 0.2);
         }
 
-        .provider-linkedin {
-            background: #0077b5;
-        }
-
-        .provider-linkedin:hover {
-            background: #005885;
+        .provider-microsoft:hover {
+            border-color: #00a1f1;
+            box-shadow: 0 0 0 1px rgba(0, 161, 241, 0.2);
         }
 
         /* Loading state */
@@ -125,14 +111,14 @@
             align-items: center;
             gap: 16px;
             padding: 32px;
-            color: #666;
+            color: #a0a0a0;
         }
 
         .loading-spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #333;
+            border-top: 2px solid #666;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -140,45 +126,51 @@
         .error-loading {
             text-align: center;
             padding: 32px;
-            color: #dc3545;
+            color: #ff6b6b;
         }
 
         .error-loading h3 {
             margin-bottom: 8px;
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: 500;
         }
 
         .error-loading p {
             font-size: 14px;
             margin-bottom: 16px;
+            color: #a0a0a0;
         }
 
         .retry-button {
-            background: #667eea;
-            color: white;
-            border: none;
+            background: #333;
+            color: #e5e5e5;
+            border: 1px solid #444;
             padding: 8px 16px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            transition: all 0.2s ease;
         }
 
         .retry-button:hover {
-            background: #5a67d8;
+            background: #404040;
+            border-color: #555;
         }
 
         .provider-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: currentColor;
+            opacity: 0.8;
         }
 
         .status-area {
             min-height: 60px;
             padding: 16px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: none;
+            border: 1px solid;
         }
 
         .status-area.show {
@@ -186,77 +178,106 @@
         }
 
         .status-success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #4ade80;
         }
 
         .status-error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
         }
 
         .status-title {
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 8px;
+            font-size: 14px;
         }
 
         .status-message {
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #a0a0a0;
         }
 
         .session-info {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
+            background: #262626;
+            border: 1px solid #333;
             border-radius: 6px;
             padding: 12px;
             margin-top: 12px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 12px;
-            color: #495057;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 11px;
+            color: #e5e5e5;
             word-break: break-all;
         }
 
         .footer {
             color: #666;
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 12px;
+            line-height: 1.5;
+            font-weight: 400;
         }
 
         .footer a {
-            color: #667eea;
+            color: #888;
             text-decoration: none;
         }
 
         .footer a:hover {
-            text-decoration: underline;
+            color: #a0a0a0;
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 30px 20px;
+                padding: 32px 24px;
+                margin: 16px;
             }
 
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
 
             .oauth-button {
-                padding: 14px 20px;
-                font-size: 15px;
+                padding: 12px 18px;
+                font-size: 14px;
             }
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #333;
+            color: #e5e5e5;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .skip-link:focus {
+            top: 6px;
         }
     </style>
 </head>
-    <body>
+
+<body>
+    <!-- Server-side provider data for backward compatibility -->
+    <script>
+        {% if providers %}
+        window.serverProviders = {{ providers | tojson }};
+        {% endif %}
+    </script>
+
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <main class="container" role="main" id="main-content">
         <div class="header">
             <h1>SecureContext Protocol</h1>
-            <p>Connect your accounts to enable secure, user-consented access for AI agents and applications.</p>
+            <p>Secure authentication for AI agents</p>
         </div>
 
         <!-- Status display area -->
@@ -276,193 +297,189 @@
         </div>
 
         <div class="footer">
-            <p>Your data remains secure and is only accessible with your explicit consent. Tokens are stored temporarily and cleared when the application restarts.</p>
+            <p>Secure authentication for AI agents. Tokens are temporary and consent-based.</p>
         </div>
-    </div>
+        </div>
 
-    <script>
-        /**
-         * SecureContext Protocol UI JavaScript
-         * Handles URL parameter parsing and status display updates
-         */
+        <script>
+            /**
+             * SecureContext Protocol UI JavaScript
+             * Handles URL parameter parsing and status display updates
+             */
 
-        // Parse URL parameters on page load
-        function parseURLParameters() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return {
-                session_id: urlParams.get('session_id'),
-                error: urlParams.get('error'),
-                error_description: urlParams.get('error_description'),
-                status: urlParams.get('status')
-            };
-        }
-
-        // Display success message with session ID
-        function showSuccessStatus(sessionId) {
-            const statusArea = document.getElementById('statusArea');
-            const statusTitle = document.getElementById('statusTitle');
-            const statusMessage = document.getElementById('statusMessage');
-            const sessionInfo = document.getElementById('sessionInfo');
-
-            statusArea.className = 'status-area status-success show';
-            statusTitle.textContent = '✅ Connection Successful!';
-            statusMessage.textContent = 'Your account has been successfully connected. You can now use this session ID to access your data through authorized applications.';
-            
-            sessionInfo.style.display = 'block';
-            sessionInfo.innerHTML = `<strong>Session ID:</strong><br>${sessionId}`;
-
-            // Scroll to status area
-            statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // Display error message
-        function showErrorStatus(error, errorDescription) {
-            const statusArea = document.getElementById('statusArea');
-            const statusTitle = document.getElementById('statusTitle');
-            const statusMessage = document.getElementById('statusMessage');
-            const sessionInfo = document.getElementById('sessionInfo');
-
-            statusArea.className = 'status-area status-error show';
-            sessionInfo.style.display = 'none';
-
-            // Handle different error types with user-friendly messages
-            switch (error) {
-                case 'access_denied':
-                    statusTitle.textContent = '❌ Authorization Cancelled';
-                    statusMessage.textContent = errorDescription || 'You cancelled the authorization process. Click a connection button above to try again.';
-                    break;
-                
-                case 'state_mismatch':
-                    statusTitle.textContent = '🔒 Security Error';
-                    statusMessage.textContent = errorDescription || 'A security validation failed. This may indicate a potential security issue. Please try connecting again.';
-                    break;
-                
-                case 'session_expired':
-                    statusTitle.textContent = '⏰ Session Expired';
-                    statusMessage.textContent = errorDescription || 'Your session has expired. Please try connecting again.';
-                    break;
-                
-                case 'token_exchange_failed':
-                    statusTitle.textContent = '🔄 Token Exchange Failed';
-                    statusMessage.textContent = errorDescription || 'Failed to exchange authorization code for access token. Please try again.';
-                    break;
-                
-                case 'oauth_config_error':
-                    statusTitle.textContent = '⚙️ Configuration Error';
-                    statusMessage.textContent = errorDescription || 'OAuth configuration error. Please contact support if this problem persists.';
-                    break;
-                
-                case 'network_error':
-                    statusTitle.textContent = '🌐 Network Error';
-                    statusMessage.textContent = errorDescription || 'Network connection failed. Please check your internet connection and try again.';
-                    break;
-                
-                case 'invalid_request':
-                    statusTitle.textContent = '❓ Invalid Request';
-                    statusMessage.textContent = errorDescription || 'The authorization request was invalid. Please try again.';
-                    break;
-                
-                case 'unauthorized_client':
-                    statusTitle.textContent = '🚫 Unauthorized Client';
-                    statusMessage.textContent = errorDescription || 'This application is not authorized. Please contact support.';
-                    break;
-                
-                case 'invalid_scope':
-                    statusTitle.textContent = '🔐 Invalid Permissions';
-                    statusMessage.textContent = errorDescription || 'Invalid permissions requested. Please contact support.';
-                    break;
-                
-                default:
-                    statusTitle.textContent = '⚠️ Connection Error';
-                    statusMessage.textContent = errorDescription || `An error occurred during authorization: ${error}. Please try again.`;
-                    break;
+            // Parse URL parameters on page load
+            function parseURLParameters() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return {
+                    session_id: urlParams.get('session_id'),
+                    error: urlParams.get('error'),
+                    error_description: urlParams.get('error_description'),
+                    status: urlParams.get('status')
+                };
             }
 
-            // Scroll to status area
-            statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+            // Display success message with session ID
+            function showSuccessStatus(sessionId) {
+                const statusArea = document.getElementById('statusArea');
+                const statusTitle = document.getElementById('statusTitle');
+                const statusMessage = document.getElementById('statusMessage');
+                const sessionInfo = document.getElementById('sessionInfo');
 
-        // Update page title based on status
-        function updatePageTitle(params) {
-            const baseTitle = 'SecureContext Protocol - Authentication Proxy';
-            
-            if (params.session_id && !params.error) {
-                document.title = `${baseTitle} - Connected`;
-            } else if (params.error) {
-                document.title = `${baseTitle} - Error`;
-            } else {
-                document.title = baseTitle;
+                statusArea.className = 'status-area status-success show';
+                statusTitle.textContent = '✅ Connection Successful!';
+                statusMessage.textContent = 'Your account has been successfully connected. You can now use this session ID to access your data through authorized applications.';
+
+                sessionInfo.style.display = 'block';
+                sessionInfo.innerHTML = `<strong>Session ID:</strong><br>${sessionId}`;
+
+                // Scroll to status area
+                statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        }
 
-        // Load available providers from API
-        async function loadProviders() {
-            try {
-                console.log('Loading providers from API...');
-                const response = await fetch('/api/providers');
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            // Display error message
+            function showErrorStatus(error, errorDescription) {
+                const statusArea = document.getElementById('statusArea');
+                const statusTitle = document.getElementById('statusTitle');
+                const statusMessage = document.getElementById('statusMessage');
+                const sessionInfo = document.getElementById('sessionInfo');
+
+                statusArea.className = 'status-area status-error show';
+                sessionInfo.style.display = 'none';
+
+                // Handle different error types with user-friendly messages
+                switch (error) {
+                    case 'access_denied':
+                        statusTitle.textContent = '❌ Authorization Cancelled';
+                        statusMessage.textContent = errorDescription || 'You cancelled the authorization process. Click a connection button above to try again.';
+                        break;
+
+                    case 'state_mismatch':
+                        statusTitle.textContent = '🔒 Security Error';
+                        statusMessage.textContent = errorDescription || 'A security validation failed. This may indicate a potential security issue. Please try connecting again.';
+                        break;
+
+                    case 'session_expired':
+                        statusTitle.textContent = '⏰ Session Expired';
+                        statusMessage.textContent = errorDescription || 'Your session has expired. Please try connecting again.';
+                        break;
+
+                    case 'token_exchange_failed':
+                        statusTitle.textContent = '🔄 Token Exchange Failed';
+                        statusMessage.textContent = errorDescription || 'Failed to exchange authorization code for access token. Please try again.';
+                        break;
+
+                    case 'oauth_config_error':
+                        statusTitle.textContent = '⚙️ Configuration Error';
+                        statusMessage.textContent = errorDescription || 'OAuth configuration error. Please contact support if this problem persists.';
+                        break;
+
+                    case 'network_error':
+                        statusTitle.textContent = '🌐 Network Error';
+                        statusMessage.textContent = errorDescription || 'Network connection failed. Please check your internet connection and try again.';
+                        break;
+
+                    case 'invalid_request':
+                        statusTitle.textContent = '❓ Invalid Request';
+                        statusMessage.textContent = errorDescription || 'The authorization request was invalid. Please try again.';
+                        break;
+
+                    case 'unauthorized_client':
+                        statusTitle.textContent = '🚫 Unauthorized Client';
+                        statusMessage.textContent = errorDescription || 'This application is not authorized. Please contact support.';
+                        break;
+
+                    case 'invalid_scope':
+                        statusTitle.textContent = '🔐 Invalid Permissions';
+                        statusMessage.textContent = errorDescription || 'Invalid permissions requested. Please contact support.';
+                        break;
+
+                    default:
+                        statusTitle.textContent = '⚠️ Connection Error';
+                        statusMessage.textContent = errorDescription || `An error occurred during authorization: ${error}. Please try again.`;
+                        break;
                 }
-                
-                const data = await response.json();
-                
-                if (!data.success) {
-                    throw new Error(data.error?.message || 'Failed to load providers');
-                }
-                
-                console.log('Providers loaded:', data.data);
-                return data.data.providers || [];
-                
-            } catch (error) {
-                console.error('Error loading providers:', error);
-                throw error;
-            }
-        }
 
-        // Generate provider icon SVG
-        function getProviderIcon(providerName) {
-            const icons = {
-                google: `<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                // Scroll to status area
+                statusArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Update page title based on status
+            function updatePageTitle(params) {
+                const baseTitle = 'SecureContext Protocol - Authentication Proxy';
+
+                if (params.session_id && !params.error) {
+                    document.title = `${baseTitle} - Connected`;
+                } else if (params.error) {
+                    document.title = `${baseTitle} - Error`;
+                } else {
+                    document.title = baseTitle;
+                }
+            }
+
+            // Load available providers from API
+            async function loadProviders() {
+                try {
+                    console.log('Loading providers from API...');
+                    const response = await fetch('/api/providers');
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+                        throw new Error(data.error?.message || 'Failed to load providers');
+                    }
+
+                    console.log('Providers loaded:', data.data);
+                    return data.data.providers || [];
+
+                } catch (error) {
+                    console.error('Error loading providers:', error);
+                    throw error;
+                }
+            }
+
+            // Generate provider icon SVG
+            function getProviderIcon(providerName) {
+                const icons = {
+                    google: `<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>`,
-                
-                microsoft: `<path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/>`,
-                
-                github: `<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>`,
-                
-                linkedin: `<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>`,
-                
-                default: `<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
-            };
-            
-            return icons[providerName.toLowerCase()] || icons.default;
-        }
 
-        // Create provider button element
-        function createProviderButton(provider) {
-            const button = document.createElement('a');
-            button.href = `/oauth/${provider.name}/authorize`;
-            button.className = `oauth-button provider-button provider-${provider.name}`;
-            
-            button.innerHTML = `
+                    microsoft: `<path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/>`,
+
+                    default: `<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+                };
+
+                return icons[providerName.toLowerCase()] || icons.default;
+            }
+
+            // Create provider button element
+            function createProviderButton(provider) {
+                const button = document.createElement('a');
+                button.href = `/oauth/${provider.name}/authorize`;
+                button.className = `oauth-button provider-button provider-${provider.name}`;
+
+                button.innerHTML = `
                 <svg class="provider-icon" viewBox="0 0 24 24" aria-hidden="true">
                     ${getProviderIcon(provider.name)}
                 </svg>
                 Connect ${provider.display_name}
             `;
-            
-            // Add accessibility attributes
-            button.setAttribute('aria-describedby', `${provider.name}-help`);
-            button.setAttribute('aria-label', `Connect to ${provider.display_name} to authorize access to your data`);
-            
-            // Add click handler for loading state
-            button.addEventListener('click', function(e) {
-                const originalText = this.innerHTML;
-                
-                this.innerHTML = `
+
+                // Add accessibility attributes
+                button.setAttribute('aria-describedby', `${provider.name}-help`);
+                button.setAttribute('aria-label', `Connect to ${provider.display_name} to authorize access to your data`);
+
+                // Add click handler for loading state
+                button.addEventListener('click', function (e) {
+                    const originalText = this.innerHTML;
+
+                    this.innerHTML = `
                     <svg class="provider-icon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
                             <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
@@ -471,228 +488,237 @@
                     </svg>
                     Connecting to ${provider.display_name}...
                 `;
-                
-                this.style.pointerEvents = 'none';
-                this.style.opacity = '0.8';
-                
-                // Restore original state if user navigates back
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.style.pointerEvents = '';
-                    this.style.opacity = '';
-                }, 10000);
-            });
-            
-            return button;
-        }
 
-        // Render provider buttons
-        function renderProviders(providers) {
-            const container = document.getElementById('connectionButtons');
-            
-            if (!providers || providers.length === 0) {
-                container.innerHTML = `
+                    this.style.pointerEvents = 'none';
+                    this.style.opacity = '0.8';
+
+                    // Restore original state if user navigates back
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.pointerEvents = '';
+                        this.style.opacity = '';
+                    }, 10000);
+                });
+
+                return button;
+            }
+
+            // Render provider buttons
+            function renderProviders(providers) {
+                const container = document.getElementById('connectionButtons');
+
+                if (!providers || providers.length === 0) {
+                    container.innerHTML = `
                     <div class="error-loading">
                         <h3>No Providers Available</h3>
                         <p>No OAuth providers are currently configured.</p>
                     </div>
                 `;
-                return;
-            }
-            
-            // Clear loading state
-            container.innerHTML = '';
-            
-            // Create buttons for each provider
-            providers.forEach(provider => {
-                const button = createProviderButton(provider);
-                container.appendChild(button);
-            });
-            
-            console.log(`Rendered ${providers.length} provider buttons`);
-        }
+                    return;
+                }
 
-        // Show error state for provider loading
-        function showProviderError(error) {
-            const container = document.getElementById('connectionButtons');
-            container.innerHTML = `
+                // Clear loading state
+                container.innerHTML = '';
+
+                // Create buttons for each provider
+                providers.forEach(provider => {
+                    const button = createProviderButton(provider);
+                    container.appendChild(button);
+                });
+
+                console.log(`Rendered ${providers.length} provider buttons`);
+            }
+
+            // Show error state for provider loading
+            function showProviderError(error) {
+                const container = document.getElementById('connectionButtons');
+                container.innerHTML = `
                 <div class="error-loading">
                     <h3>Failed to Load Providers</h3>
                     <p>Unable to load available authentication providers: ${error.message}</p>
                     <button class="retry-button" onclick="initializeProviders()">Retry</button>
                 </div>
             `;
-        }
-
-        // Initialize providers
-        async function initializeProviders() {
-            try {
-                const providers = await loadProviders();
-                renderProviders(providers);
-            } catch (error) {
-                console.error('Failed to initialize providers:', error);
-                showProviderError(error);
             }
-        }
 
-        // Add CSS for loading animation
-        function addLoadingStyles() {
-            const style = document.createElement('style');
-            style.textContent = `
+            // Initialize providers
+            async function initializeProviders() {
+                try {
+                    // Try to load providers from API first
+                    const providers = await loadProviders();
+                    renderProviders(providers);
+                } catch (error) {
+                    console.error('Failed to load providers from API:', error);
+
+                    // Fallback: check if providers were passed from server-side rendering
+                    if (typeof window.serverProviders !== 'undefined' && window.serverProviders) {
+                        console.log('Using server-side rendered providers');
+                        renderProviders(window.serverProviders);
+                    } else {
+                        // Show error if no providers available
+                        showProviderError(error);
+                    }
+                }
+            }
+
+            // Add CSS for loading animation
+            function addLoadingStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
                 }
             `;
-            document.head.appendChild(style);
-        }
-
-        // Clear URL parameters after displaying status (optional, for cleaner URLs)
-        function clearURLParameters() {
-            if (window.history && window.history.replaceState) {
-                const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.history.replaceState({ path: url }, '', url);
+                document.head.appendChild(style);
             }
-        }
 
-        // Initialize the application
-        async function initializeApp() {
-            console.log('SecureContext Protocol UI initializing...');
-            
-            // Parse URL parameters
-            const params = parseURLParameters();
-            console.log('URL parameters:', params);
-            
-            // Update page title
-            updatePageTitle(params);
-            
-            // Initialize providers (load dynamically)
-            await initializeProviders();
-            
-            // Handle status display based on URL parameters
-            if (params.session_id && !params.error) {
-                // Success case - show session ID
-                showSuccessStatus(params.session_id);
-                
-                // Clear URL parameters after a delay to keep the URL clean
-                setTimeout(clearURLParameters, 3000);
-                
-            } else if (params.error) {
-                // Error case - show error message
-                showErrorStatus(params.error, params.error_description);
-                
-                // Clear URL parameters after a delay
-                setTimeout(clearURLParameters, 5000);
-            }
-            
-            // Add loading styles
-            addLoadingStyles();
-            
-            console.log('SecureContext Protocol UI initialized successfully');
-        }
-
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
-
-        // Handle browser back/forward navigation
-        window.addEventListener('popstate', function(event) {
-            // Re-parse parameters if user navigates back
-            const params = parseURLParameters();
-            if (params.session_id || params.error) {
-                location.reload();
-            }
-        });
-
-        // WebSocket streaming functionality
-        let socket = null;
-        let streamingEnabled = false;
-        
-        // Initialize WebSocket connection for real-time streaming
-        function initializeWebSocket(sessionId) {
-            if (!sessionId || socket) return;
-            
-            try {
-                // Load Socket.IO from CDN
-                if (typeof io === 'undefined') {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.socket.io/4.7.2/socket.io.min.js';
-                    script.onload = () => connectWebSocket(sessionId);
-                    document.head.appendChild(script);
-                } else {
-                    connectWebSocket(sessionId);
+            // Clear URL parameters after displaying status (optional, for cleaner URLs)
+            function clearURLParameters() {
+                if (window.history && window.history.replaceState) {
+                    const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({ path: url }, '', url);
                 }
-            } catch (error) {
-                console.error('Failed to initialize WebSocket:', error);
             }
-        }
-        
-        // Connect to WebSocket
-        function connectWebSocket(sessionId) {
-            try {
-                socket = io({
-                    query: {
-                        session_id: sessionId
+
+            // Initialize the application
+            async function initializeApp() {
+                console.log('SecureContext Protocol UI initializing...');
+
+                // Parse URL parameters
+                const params = parseURLParameters();
+                console.log('URL parameters:', params);
+
+                // Update page title
+                updatePageTitle(params);
+
+                // Initialize providers (load dynamically)
+                await initializeProviders();
+
+                // Handle status display based on URL parameters
+                if (params.session_id && !params.error) {
+                    // Success case - show session ID
+                    showSuccessStatus(params.session_id);
+
+                    // Clear URL parameters after a delay to keep the URL clean
+                    setTimeout(clearURLParameters, 3000);
+
+                } else if (params.error) {
+                    // Error case - show error message
+                    showErrorStatus(params.error, params.error_description);
+
+                    // Clear URL parameters after a delay
+                    setTimeout(clearURLParameters, 5000);
+                }
+
+                // Add loading styles
+                addLoadingStyles();
+
+                console.log('SecureContext Protocol UI initialized successfully');
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeApp);
+            } else {
+                initializeApp();
+            }
+
+            // Handle browser back/forward navigation
+            window.addEventListener('popstate', function (event) {
+                // Re-parse parameters if user navigates back
+                const params = parseURLParameters();
+                if (params.session_id || params.error) {
+                    location.reload();
+                }
+            });
+
+            // WebSocket streaming functionality
+            let socket = null;
+            let streamingEnabled = false;
+
+            // Initialize WebSocket connection for real-time streaming
+            function initializeWebSocket(sessionId) {
+                if (!sessionId || socket) return;
+
+                try {
+                    // Load Socket.IO from CDN
+                    if (typeof io === 'undefined') {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.socket.io/4.7.2/socket.io.min.js';
+                        script.onload = () => connectWebSocket(sessionId);
+                        document.head.appendChild(script);
+                    } else {
+                        connectWebSocket(sessionId);
                     }
-                });
-                
-                socket.on('connect', () => {
-                    console.log('WebSocket connected for session:', sessionId);
-                    streamingEnabled = true;
-                    showStreamingStatus('Connected to real-time streaming');
-                });
-                
-                socket.on('disconnect', () => {
-                    console.log('WebSocket disconnected');
-                    streamingEnabled = false;
-                    showStreamingStatus('Disconnected from streaming', 'warning');
-                });
-                
-                socket.on('stream_event', (data) => {
-                    console.log('Stream event received:', data);
-                    handleStreamEvent(data);
-                });
-                
-                socket.on('error', (error) => {
-                    console.error('WebSocket error:', error);
-                    showStreamingStatus('Streaming error: ' + error.message, 'error');
-                });
-                
-            } catch (error) {
-                console.error('Failed to connect WebSocket:', error);
+                } catch (error) {
+                    console.error('Failed to initialize WebSocket:', error);
+                }
             }
-        }
-        
-        // Handle incoming stream events
-        function handleStreamEvent(event) {
-            const eventType = event.event_type;
-            const data = event.data;
-            
-            switch (eventType) {
-                case 'data_update':
-                    showDataUpdate(data);
-                    break;
-                case 'token_refresh':
-                    showTokenRefresh(data);
-                    break;
-                case 'rate_limit_warning':
-                    showRateLimitWarning(data);
-                    break;
-                default:
-                    console.log('Unknown stream event:', event);
+
+            // Connect to WebSocket
+            function connectWebSocket(sessionId) {
+                try {
+                    socket = io({
+                        query: {
+                            session_id: sessionId
+                        }
+                    });
+
+                    socket.on('connect', () => {
+                        console.log('WebSocket connected for session:', sessionId);
+                        streamingEnabled = true;
+                        showStreamingStatus('Connected to real-time streaming');
+                    });
+
+                    socket.on('disconnect', () => {
+                        console.log('WebSocket disconnected');
+                        streamingEnabled = false;
+                        showStreamingStatus('Disconnected from streaming', 'warning');
+                    });
+
+                    socket.on('stream_event', (data) => {
+                        console.log('Stream event received:', data);
+                        handleStreamEvent(data);
+                    });
+
+                    socket.on('error', (error) => {
+                        console.error('WebSocket error:', error);
+                        showStreamingStatus('Streaming error: ' + error.message, 'error');
+                    });
+
+                } catch (error) {
+                    console.error('Failed to connect WebSocket:', error);
+                }
             }
-        }
-        
-        // Show streaming status
-        function showStreamingStatus(message, type = 'info') {
-            let statusDiv = document.getElementById('streamingStatus');
-            if (!statusDiv) {
-                statusDiv = document.createElement('div');
-                statusDiv.id = 'streamingStatus';
-                statusDiv.style.cssText = `
+
+            // Handle incoming stream events
+            function handleStreamEvent(event) {
+                const eventType = event.event_type;
+                const data = event.data;
+
+                switch (eventType) {
+                    case 'data_update':
+                        showDataUpdate(data);
+                        break;
+                    case 'token_refresh':
+                        showTokenRefresh(data);
+                        break;
+                    case 'rate_limit_warning':
+                        showRateLimitWarning(data);
+                        break;
+                    default:
+                        console.log('Unknown stream event:', event);
+                }
+            }
+
+            // Show streaming status
+            function showStreamingStatus(message, type = 'info') {
+                let statusDiv = document.getElementById('streamingStatus');
+                if (!statusDiv) {
+                    statusDiv = document.createElement('div');
+                    statusDiv.id = 'streamingStatus';
+                    statusDiv.style.cssText = `
                     position: fixed;
                     top: 20px;
                     right: 20px;
@@ -702,114 +728,115 @@
                     z-index: 1000;
                     max-width: 300px;
                 `;
-                document.body.appendChild(statusDiv);
-            }
-            
-            const colors = {
-                info: { bg: '#e3f2fd', border: '#2196f3', text: '#1976d2' },
-                warning: { bg: '#fff3e0', border: '#ff9800', text: '#f57c00' },
-                error: { bg: '#ffebee', border: '#f44336', text: '#d32f2f' },
-                success: { bg: '#e8f5e9', border: '#4caf50', text: '#388e3c' }
-            };
-            
-            const color = colors[type] || colors.info;
-            statusDiv.style.backgroundColor = color.bg;
-            statusDiv.style.border = `1px solid ${color.border}`;
-            statusDiv.style.color = color.text;
-            statusDiv.textContent = message;
-            
-            // Auto-hide after 5 seconds for non-error messages
-            if (type !== 'error') {
-                setTimeout(() => {
-                    if (statusDiv.parentNode) {
-                        statusDiv.parentNode.removeChild(statusDiv);
-                    }
-                }, 5000);
-            }
-        }
-        
-        // Show data update notification
-        function showDataUpdate(data) {
-            const dataType = data.data_type;
-            const payload = data.payload;
-            
-            showStreamingStatus(`New ${dataType} data received`, 'success');
-            
-            // You could add more sophisticated data display here
-            console.log('Data update:', dataType, payload);
-        }
-        
-        // Show token refresh notification
-        function showTokenRefresh(data) {
-            const expiresIn = Math.round(data.expires_in / 60);
-            showStreamingStatus(`Token refreshed. Expires in ${expiresIn} minutes`, 'info');
-        }
-        
-        // Show rate limit warning
-        function showRateLimitWarning(data) {
-            const remaining = data.remaining_quota;
-            showStreamingStatus(`Rate limit warning: ${remaining} requests remaining`, 'warning');
-        }
-        
-        // Start data streaming
-        async function startDataStream(sessionId, streamType, options = {}) {
-            try {
-                const response = await fetch('/api/stream/start', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        stream_type: streamType,
-                        batch_size: options.batchSize || 50,
-                        max_results: options.maxResults || 1000,
-                        filters: options.filters || {},
-                        real_time: options.realTime || true
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStreamingStatus(`Started ${streamType} stream`, 'success');
-                    return data.data.stream_id;
-                } else {
-                    throw new Error(data.error?.message || 'Failed to start stream');
+                    document.body.appendChild(statusDiv);
                 }
-                
-            } catch (error) {
-                console.error('Failed to start data stream:', error);
-                showStreamingStatus('Failed to start stream: ' + error.message, 'error');
-                return null;
-            }
-        }
-        
-        // Enhanced initialization to include WebSocket
-        const originalInitializeApp = initializeApp;
-        initializeApp = async function() {
-            await originalInitializeApp();
-            
-            // Initialize WebSocket if we have a session ID
-            const params = parseURLParameters();
-            if (params.session_id && !params.error) {
-                setTimeout(() => {
-                    initializeWebSocket(params.session_id);
-                }, 1000); // Small delay to ensure UI is ready
-            }
-        };
 
-        // Expose streaming functions for debugging
-        window.SCPDebug = {
-            parseURLParameters,
-            showSuccessStatus,
-            showErrorStatus,
-            clearURLParameters,
-            initializeWebSocket,
-            startDataStream,
-            socket: () => socket,
-            streamingEnabled: () => streamingEnabled
-        };
-    </script>
+                const colors = {
+                    info: { bg: '#e3f2fd', border: '#2196f3', text: '#1976d2' },
+                    warning: { bg: '#fff3e0', border: '#ff9800', text: '#f57c00' },
+                    error: { bg: '#ffebee', border: '#f44336', text: '#d32f2f' },
+                    success: { bg: '#e8f5e9', border: '#4caf50', text: '#388e3c' }
+                };
+
+                const color = colors[type] || colors.info;
+                statusDiv.style.backgroundColor = color.bg;
+                statusDiv.style.border = `1px solid ${color.border}`;
+                statusDiv.style.color = color.text;
+                statusDiv.textContent = message;
+
+                // Auto-hide after 5 seconds for non-error messages
+                if (type !== 'error') {
+                    setTimeout(() => {
+                        if (statusDiv.parentNode) {
+                            statusDiv.parentNode.removeChild(statusDiv);
+                        }
+                    }, 5000);
+                }
+            }
+
+            // Show data update notification
+            function showDataUpdate(data) {
+                const dataType = data.data_type;
+                const payload = data.payload;
+
+                showStreamingStatus(`New ${dataType} data received`, 'success');
+
+                // You could add more sophisticated data display here
+                console.log('Data update:', dataType, payload);
+            }
+
+            // Show token refresh notification
+            function showTokenRefresh(data) {
+                const expiresIn = Math.round(data.expires_in / 60);
+                showStreamingStatus(`Token refreshed. Expires in ${expiresIn} minutes`, 'info');
+            }
+
+            // Show rate limit warning
+            function showRateLimitWarning(data) {
+                const remaining = data.remaining_quota;
+                showStreamingStatus(`Rate limit warning: ${remaining} requests remaining`, 'warning');
+            }
+
+            // Start data streaming
+            async function startDataStream(sessionId, streamType, options = {}) {
+                try {
+                    const response = await fetch('/api/stream/start', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            stream_type: streamType,
+                            batch_size: options.batchSize || 50,
+                            max_results: options.maxResults || 1000,
+                            filters: options.filters || {},
+                            real_time: options.realTime || true
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showStreamingStatus(`Started ${streamType} stream`, 'success');
+                        return data.data.stream_id;
+                    } else {
+                        throw new Error(data.error?.message || 'Failed to start stream');
+                    }
+
+                } catch (error) {
+                    console.error('Failed to start data stream:', error);
+                    showStreamingStatus('Failed to start stream: ' + error.message, 'error');
+                    return null;
+                }
+            }
+
+            // Enhanced initialization to include WebSocket
+            const originalInitializeApp = initializeApp;
+            initializeApp = async function () {
+                await originalInitializeApp();
+
+                // Initialize WebSocket if we have a session ID
+                const params = parseURLParameters();
+                if (params.session_id && !params.error) {
+                    setTimeout(() => {
+                        initializeWebSocket(params.session_id);
+                    }, 1000); // Small delay to ensure UI is ready
+                }
+            };
+
+            // Expose streaming functions for debugging
+            window.SCPDebug = {
+                parseURLParameters,
+                showSuccessStatus,
+                showErrorStatus,
+                clearURLParameters,
+                initializeWebSocket,
+                startDataStream,
+                socket: () => socket,
+                streamingEnabled: () => streamingEnabled
+            };
+        </script>
 </body>
+
 </html>
