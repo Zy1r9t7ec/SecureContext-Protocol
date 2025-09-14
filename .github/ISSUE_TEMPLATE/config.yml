@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/yourusername/secure-context-protocol/discussions
+    about: Ask questions, share ideas, and discuss with the community
+  - name: 📚 Documentation
+    url: https://github.com/yourusername/secure-context-protocol/wiki
+    about: Check the documentation for setup guides and API reference
+  - name: 🚀 Quick Start Guide
+    url: https://github.com/yourusername/secure-context-protocol#-quick-start
+    about: Get started with SCP in minutes

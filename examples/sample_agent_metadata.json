@@ -1,0 +1,65 @@
+{
+  "agent_id": "email-assistant-v1",
+  "name": "Email Assistant",
+  "version": "1.2.0",
+  "description": "An intelligent email management agent that can read, organize, and respond to emails across multiple providers.",
+  "author": "SecureContext Team",
+  "license": "MIT",
+  "homepage": "https://github.com/securecontext/email-assistant",
+  "repository": "https://github.com/securecontext/email-assistant",
+  "documentation": "https://docs.securecontext.com/agents/email-assistant",
+  "capabilities": [
+    {
+      "capability_type": "email_management",
+      "name": "Email Reading",
+      "description": "Read and parse emails from Gmail and Outlook",
+      "required_scopes": [
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "Mail.Read"
+      ],
+      "supported_providers": ["google", "microsoft"],
+      "data_types": ["messages", "threads", "labels"],
+      "rate_limits": {
+        "requests_per_minute": 100,
+        "messages_per_hour": 1000
+      },
+      "security_level": "high"
+    },
+    {
+      "capability_type": "email_management",
+      "name": "Email Organization",
+      "description": "Organize emails by creating labels and moving messages",
+      "required_scopes": [
+        "https://www.googleapis.com/auth/gmail.modify",
+        "Mail.ReadWrite"
+      ],
+      "supported_providers": ["google", "microsoft"],
+      "data_types": ["messages", "labels", "folders"],
+      "rate_limits": {
+        "requests_per_minute": 50,
+        "modifications_per_hour": 500
+      },
+      "security_level": "high"
+    },
+    {
+      "capability_type": "data_analysis",
+      "name": "Email Analytics",
+      "description": "Analyze email patterns and generate insights",
+      "required_scopes": [
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "Mail.Read"
+      ],
+      "supported_providers": ["google", "microsoft"],
+      "data_types": ["messages", "analytics"],
+      "rate_limits": {
+        "requests_per_minute": 200,
+        "analysis_per_day": 10000
+      },
+      "security_level": "standard"
+    }
+  ],
+  "supported_frameworks": ["langchain", "crewai", "autogen"],
+  "minimum_scp_version": "1.0",
+  "tags": ["email", "productivity", "automation", "ai-assistant"],
+  "category": "productivity"
+}

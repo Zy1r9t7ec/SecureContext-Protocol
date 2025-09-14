@@ -254,4 +254,42 @@ __marimo__/
 
 # macOS
 .DS_Store
+<<<<<<< HEAD
 >>>>>>> 8836ba2 (Initial commit: SecureContext Protocol MVP with extensible architecture)
+=======
+
+# Development and Testing Files (keep for development, exclude from production)
+# Individual test files (consolidated versions preferred)
+*_test_simple.py
+*_test_enhanced.py
+*_test_complete.py
+*_test_final.py
+*_test_fixed.py
+performance_scalability_test.py
+performance_scalability_test_complete.py
+performance_scalability_test_enhanced.py
+performance_scalability_test_final.py
+performance_scalability_test_fixed.py
+ui_experience_test.py
+ui_structure_test.py
+ui_template_test.py
+api_integration_test_simple.py
+
+# Task reports (consolidated in IMPLEMENTATION_SUMMARY.md)
+TASK_*_REPORT.md
+TASK_*_SUMMARY.md
+TASK_*_COMPLETION_SUMMARY.md
+
+# Test output files
+security_test_report.json
+TEST_REPORT.md
+
+# Development utility files
+fix_oauth_and_ui.py
+improve_accessibility.py
+demo_standardized_api.py
+cleanup_for_production.py
+
+# Duplicate documentation (keep main versions)
+IMPLEMENTATION_COMPLETE.md
+>>>>>>> f069b55 (Complete Kiro generate SCP MVP)

@@ -1,0 +1,24 @@
+{
+  "name": "OAuth Configuration Validator",
+  "description": "Validates OAuth configuration when .env or provider files are modified",
+  "trigger": {
+    "event": "file_save",
+    "patterns": [".env", "authentication_proxy/providers/*.py", "authentication_proxy/config.py"]
+  },
+  "agent": {
+    "prompt": "Validate the OAuth configuration changes. Check for:\n1. Required environment variables\n2. Provider configuration completeness\n3. Security best practices\n4. Compatibility with existing providers\n\nProvide specific recommendations if issues are found.",
+    "context": [
+      "#File",
+      ".env.example",
+      "authentication_proxy/config.py"
+    ]
+  },
+  "actions": {
+    "on_success": {
+      "notification": "✅ OAuth configuration is valid"
+    },
+    "on_failure": {
+      "notification": "⚠️ OAuth configuration issues detected"
+    }
+  }
+}

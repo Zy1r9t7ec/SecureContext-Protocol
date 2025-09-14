@@ -1,0 +1,200 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scp-app
+  namespace: scp
+  labels:
+    app.kubernetes.io/name: secure-context-protocol
+    app.kubernetes.io/component: app
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: secure-context-protocol
+      app.kubernetes.io/component: app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: secure-context-protocol
+        app.kubernetes.io/component: app
+        app.kubernetes.io/version: "1.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        prometheus.io/path: "/api/storage/stats"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: scp-app
+        image: scp/authentication-proxy:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        env:
+        # Load configuration from ConfigMap
+        - name: FLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: FLASK_ENV
+        - name: FLASK_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: FLASK_HOST
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: FLASK_PORT
+        - name: FLASK_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: FLASK_DEBUG
+        - name: SCP_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SCP_ENVIRONMENT
+        - name: SCP_WEBHOOK_EVENTS
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SCP_WEBHOOK_EVENTS
+        - name: SCP_WEBHOOK_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SCP_WEBHOOK_TIMEOUT
+        - name: SCP_WEBHOOK_RETRY_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SCP_WEBHOOK_RETRY_COUNT
+        - name: SCP_WEBHOOK_RETRY_DELAY
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SCP_WEBHOOK_RETRY_DELAY
+        - name: SESSION_COOKIE_SECURE
+          valueFrom:
+            configMapKeyRef:
+              name: scp-config
+              key: SESSION_COOKIE_SECURE
+        
+        # Load secrets from Secret
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: FLASK_SECRET_KEY
+        - name: SCP_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: SCP_BASE_URL
+        - name: SCP_CALLBACK_URL_OVERRIDE
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: SCP_CALLBACK_URL_OVERRIDE
+        - name: SCP_ENABLE_WEBHOOKS
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: SCP_ENABLE_WEBHOOKS
+        - name: SCP_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: SCP_WEBHOOK_URL
+        - name: SCP_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: SCP_WEBHOOK_SECRET
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: GOOGLE_CLIENT_ID
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: GOOGLE_CLIENT_SECRET
+        - name: MICROSOFT_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: MICROSOFT_CLIENT_ID
+        - name: MICROSOFT_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: scp-secrets
+              key: MICROSOFT_CLIENT_SECRET
+        
+        volumeMounts:
+        - name: providers-config
+          mountPath: /app/providers.json
+          subPath: providers.json
+          readOnly: true
+        
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        
+        livenessProbe:
+          httpGet:
+            path: /api/enterprise/config
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /api/enterprise/config
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
+      
+      volumes:
+      - name: providers-config
+        configMap:
+          name: scp-config
+          items:
+          - key: providers.json
+            path: providers.json
+      
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

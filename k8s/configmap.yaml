@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scp-config
+  namespace: scp
+  labels:
+    app.kubernetes.io/name: secure-context-protocol
+    app.kubernetes.io/component: config
+data:
+  FLASK_ENV: "production"
+  FLASK_HOST: "0.0.0.0"
+  FLASK_PORT: "5000"
+  FLASK_DEBUG: "false"
+  SCP_ENVIRONMENT: "production"
+  SCP_WEBHOOK_EVENTS: "token_created,token_retrieved,token_expired"
+  SCP_WEBHOOK_TIMEOUT: "30"
+  SCP_WEBHOOK_RETRY_COUNT: "3"
+  SCP_WEBHOOK_RETRY_DELAY: "5"
+  SESSION_COOKIE_SECURE: "true"
+  providers.json: |
+    {
+      "providers": {
+        "google": {
+          "name": "google",
+          "display_name": "Google Account",
+          "description": "Connect your Google account to access Gmail and Calendar data",
+          "client_id": "env:GOOGLE_CLIENT_ID",
+          "client_secret": "env:GOOGLE_CLIENT_SECRET",
+          "scopes": [
+            "profile",
+            "email",
+            "https://www.googleapis.com/auth/gmail.readonly",
+            "https://www.googleapis.com/auth/calendar.readonly"
+          ],
+          "authorize_url": "https://accounts.google.com/o/oauth2/auth",
+          "token_url": "https://oauth2.googleapis.com/token",
+          "provider_class": "GoogleProvider",
+          "enabled": true,
+          "icon": "google",
+          "color": "#4285f4",
+          "additional_params": {
+            "access_type": "offline",
+            "prompt": "consent"
+          }
+        },
+        "microsoft": {
+          "name": "microsoft",
+          "display_name": "Microsoft Account",
+          "description": "Connect your Microsoft account to access Outlook Mail and Calendar data",
+          "client_id": "env:MICROSOFT_CLIENT_ID",
+          "client_secret": "env:MICROSOFT_CLIENT_SECRET",
+          "scopes": [
+            "User.Read",
+            "Mail.Read",
+            "Calendars.Read"
+          ],
+          "authorize_url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+          "token_url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+          "provider_class": "MicrosoftProvider",
+          "enabled": true,
+          "icon": "microsoft",
+          "color": "#0078d4",
+          "additional_params": {
+            "response_mode": "query"
+          }
+        }
+      },
+      "settings": {
+        "default_session_timeout": 3600,
+        "max_concurrent_sessions": 1000,
+        "enable_audit_logging": true,
+        "auto_cleanup_expired_sessions": true
+      }
+    }

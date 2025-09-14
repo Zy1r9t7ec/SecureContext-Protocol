@@ -75,22 +75,96 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .google-button {
-            background: #4285f4;
+        /* Dynamic provider button styles */
+        .provider-button {
+            background: #6c757d;
             color: white;
         }
 
-        .google-button:hover {
+        .provider-button:hover {
+            background: #5a6268;
+        }
+
+        /* Specific provider colors */
+        .provider-google {
+            background: #4285f4;
+        }
+
+        .provider-google:hover {
             background: #3367d6;
         }
 
-        .microsoft-button {
+        .provider-microsoft {
             background: #00a1f1;
-            color: white;
         }
 
-        .microsoft-button:hover {
+        .provider-microsoft:hover {
             background: #0078d4;
+        }
+
+        .provider-github {
+            background: #333;
+        }
+
+        .provider-github:hover {
+            background: #24292e;
+        }
+
+        .provider-linkedin {
+            background: #0077b5;
+        }
+
+        .provider-linkedin:hover {
+            background: #005885;
+        }
+
+        /* Loading state */
+        .loading-providers {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 32px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-loading {
+            text-align: center;
+            padding: 32px;
+            color: #dc3545;
+        }
+
+        .error-loading h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .error-loading p {
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .retry-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .retry-button:hover {
+            background: #5a67d8;
         }
 
         .provider-icon {
@@ -176,38 +250,29 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+    <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <main class="container" role="main" id="main-content">
         <div class="header">
             <h1>SecureContext Protocol</h1>
             <p>Connect your accounts to enable secure, user-consented access for AI agents and applications.</p>
         </div>
 
         <!-- Status display area -->
-        <div id="statusArea" class="status-area">
+        <div id="statusArea" class="status-area" role="alert" aria-live="polite">
             <div id="statusTitle" class="status-title"></div>
             <div id="statusMessage" class="status-message"></div>
             <div id="sessionInfo" class="session-info" style="display: none;"></div>
         </div>
 
-        <!-- OAuth connection buttons -->
-        <div class="connection-buttons">
-            <a href="/oauth/google/authorize" class="oauth-button google-button">
-                <svg class="provider-icon" viewBox="0 0 24 24">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Connect Google Account
-            </a>
-
-            <a href="/oauth/microsoft/authorize" class="oauth-button microsoft-button">
-                <svg class="provider-icon" viewBox="0 0 24 24">
-                    <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/>
-                </svg>
-                Connect Microsoft Account
-            </a>
+        <!-- OAuth connection buttons (dynamically generated) -->
+        <div id="connectionButtons" class="connection-buttons">
+            <!-- Provider buttons will be dynamically loaded here -->
+            <div class="loading-providers">
+                <div class="loading-spinner"></div>
+                <p>Loading available providers...</p>
+            </div>
         </div>
 
         <div class="footer">
@@ -330,37 +395,144 @@
             }
         }
 
-        // Add visual feedback for button interactions
-        function addButtonInteractions() {
-            const buttons = document.querySelectorAll('.oauth-button');
+        // Load available providers from API
+        async function loadProviders() {
+            try {
+                console.log('Loading providers from API...');
+                const response = await fetch('/api/providers');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error?.message || 'Failed to load providers');
+                }
+                
+                console.log('Providers loaded:', data.data);
+                return data.data.providers || [];
+                
+            } catch (error) {
+                console.error('Error loading providers:', error);
+                throw error;
+            }
+        }
+
+        // Generate provider icon SVG
+        function getProviderIcon(providerName) {
+            const icons = {
+                google: `<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>`,
+                
+                microsoft: `<path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/>`,
+                
+                github: `<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>`,
+                
+                linkedin: `<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>`,
+                
+                default: `<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                         <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+            };
             
-            buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    // Add loading state
-                    const originalText = this.innerHTML;
-                    const provider = this.classList.contains('google-button') ? 'Google' : 'Microsoft';
-                    
-                    this.innerHTML = `
-                        <svg class="provider-icon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-                                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
-                                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
-                            </circle>
-                        </svg>
-                        Connecting to ${provider}...
-                    `;
-                    
-                    this.style.pointerEvents = 'none';
-                    this.style.opacity = '0.8';
-                    
-                    // Restore original state if user navigates back
-                    setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.style.pointerEvents = '';
-                        this.style.opacity = '';
-                    }, 10000);
-                });
+            return icons[providerName.toLowerCase()] || icons.default;
+        }
+
+        // Create provider button element
+        function createProviderButton(provider) {
+            const button = document.createElement('a');
+            button.href = `/oauth/${provider.name}/authorize`;
+            button.className = `oauth-button provider-button provider-${provider.name}`;
+            
+            button.innerHTML = `
+                <svg class="provider-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    ${getProviderIcon(provider.name)}
+                </svg>
+                Connect ${provider.display_name}
+            `;
+            
+            // Add accessibility attributes
+            button.setAttribute('aria-describedby', `${provider.name}-help`);
+            button.setAttribute('aria-label', `Connect to ${provider.display_name} to authorize access to your data`);
+            
+            // Add click handler for loading state
+            button.addEventListener('click', function(e) {
+                const originalText = this.innerHTML;
+                
+                this.innerHTML = `
+                    <svg class="provider-icon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                            <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+                            <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                    Connecting to ${provider.display_name}...
+                `;
+                
+                this.style.pointerEvents = 'none';
+                this.style.opacity = '0.8';
+                
+                // Restore original state if user navigates back
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = '';
+                    this.style.opacity = '';
+                }, 10000);
             });
+            
+            return button;
+        }
+
+        // Render provider buttons
+        function renderProviders(providers) {
+            const container = document.getElementById('connectionButtons');
+            
+            if (!providers || providers.length === 0) {
+                container.innerHTML = `
+                    <div class="error-loading">
+                        <h3>No Providers Available</h3>
+                        <p>No OAuth providers are currently configured.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Clear loading state
+            container.innerHTML = '';
+            
+            // Create buttons for each provider
+            providers.forEach(provider => {
+                const button = createProviderButton(provider);
+                container.appendChild(button);
+            });
+            
+            console.log(`Rendered ${providers.length} provider buttons`);
+        }
+
+        // Show error state for provider loading
+        function showProviderError(error) {
+            const container = document.getElementById('connectionButtons');
+            container.innerHTML = `
+                <div class="error-loading">
+                    <h3>Failed to Load Providers</h3>
+                    <p>Unable to load available authentication providers: ${error.message}</p>
+                    <button class="retry-button" onclick="initializeProviders()">Retry</button>
+                </div>
+            `;
+        }
+
+        // Initialize providers
+        async function initializeProviders() {
+            try {
+                const providers = await loadProviders();
+                renderProviders(providers);
+            } catch (error) {
+                console.error('Failed to initialize providers:', error);
+                showProviderError(error);
+            }
         }
 
         // Add CSS for loading animation
@@ -384,7 +556,7 @@
         }
 
         // Initialize the application
-        function initializeApp() {
+        async function initializeApp() {
             console.log('SecureContext Protocol UI initializing...');
             
             // Parse URL parameters
@@ -393,6 +565,9 @@
             
             // Update page title
             updatePageTitle(params);
+            
+            // Initialize providers (load dynamically)
+            await initializeProviders();
             
             // Handle status display based on URL parameters
             if (params.session_id && !params.error) {
@@ -409,9 +584,6 @@
                 // Clear URL parameters after a delay
                 setTimeout(clearURLParameters, 5000);
             }
-            
-            // Add button interactions
-            addButtonInteractions();
             
             // Add loading styles
             addLoadingStyles();
@@ -435,12 +607,208 @@
             }
         });
 
-        // Expose utility functions for debugging
+        // WebSocket streaming functionality
+        let socket = null;
+        let streamingEnabled = false;
+        
+        // Initialize WebSocket connection for real-time streaming
+        function initializeWebSocket(sessionId) {
+            if (!sessionId || socket) return;
+            
+            try {
+                // Load Socket.IO from CDN
+                if (typeof io === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.socket.io/4.7.2/socket.io.min.js';
+                    script.onload = () => connectWebSocket(sessionId);
+                    document.head.appendChild(script);
+                } else {
+                    connectWebSocket(sessionId);
+                }
+            } catch (error) {
+                console.error('Failed to initialize WebSocket:', error);
+            }
+        }
+        
+        // Connect to WebSocket
+        function connectWebSocket(sessionId) {
+            try {
+                socket = io({
+                    query: {
+                        session_id: sessionId
+                    }
+                });
+                
+                socket.on('connect', () => {
+                    console.log('WebSocket connected for session:', sessionId);
+                    streamingEnabled = true;
+                    showStreamingStatus('Connected to real-time streaming');
+                });
+                
+                socket.on('disconnect', () => {
+                    console.log('WebSocket disconnected');
+                    streamingEnabled = false;
+                    showStreamingStatus('Disconnected from streaming', 'warning');
+                });
+                
+                socket.on('stream_event', (data) => {
+                    console.log('Stream event received:', data);
+                    handleStreamEvent(data);
+                });
+                
+                socket.on('error', (error) => {
+                    console.error('WebSocket error:', error);
+                    showStreamingStatus('Streaming error: ' + error.message, 'error');
+                });
+                
+            } catch (error) {
+                console.error('Failed to connect WebSocket:', error);
+            }
+        }
+        
+        // Handle incoming stream events
+        function handleStreamEvent(event) {
+            const eventType = event.event_type;
+            const data = event.data;
+            
+            switch (eventType) {
+                case 'data_update':
+                    showDataUpdate(data);
+                    break;
+                case 'token_refresh':
+                    showTokenRefresh(data);
+                    break;
+                case 'rate_limit_warning':
+                    showRateLimitWarning(data);
+                    break;
+                default:
+                    console.log('Unknown stream event:', event);
+            }
+        }
+        
+        // Show streaming status
+        function showStreamingStatus(message, type = 'info') {
+            let statusDiv = document.getElementById('streamingStatus');
+            if (!statusDiv) {
+                statusDiv = document.createElement('div');
+                statusDiv.id = 'streamingStatus';
+                statusDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 10px 15px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    z-index: 1000;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(statusDiv);
+            }
+            
+            const colors = {
+                info: { bg: '#e3f2fd', border: '#2196f3', text: '#1976d2' },
+                warning: { bg: '#fff3e0', border: '#ff9800', text: '#f57c00' },
+                error: { bg: '#ffebee', border: '#f44336', text: '#d32f2f' },
+                success: { bg: '#e8f5e9', border: '#4caf50', text: '#388e3c' }
+            };
+            
+            const color = colors[type] || colors.info;
+            statusDiv.style.backgroundColor = color.bg;
+            statusDiv.style.border = `1px solid ${color.border}`;
+            statusDiv.style.color = color.text;
+            statusDiv.textContent = message;
+            
+            // Auto-hide after 5 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    if (statusDiv.parentNode) {
+                        statusDiv.parentNode.removeChild(statusDiv);
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Show data update notification
+        function showDataUpdate(data) {
+            const dataType = data.data_type;
+            const payload = data.payload;
+            
+            showStreamingStatus(`New ${dataType} data received`, 'success');
+            
+            // You could add more sophisticated data display here
+            console.log('Data update:', dataType, payload);
+        }
+        
+        // Show token refresh notification
+        function showTokenRefresh(data) {
+            const expiresIn = Math.round(data.expires_in / 60);
+            showStreamingStatus(`Token refreshed. Expires in ${expiresIn} minutes`, 'info');
+        }
+        
+        // Show rate limit warning
+        function showRateLimitWarning(data) {
+            const remaining = data.remaining_quota;
+            showStreamingStatus(`Rate limit warning: ${remaining} requests remaining`, 'warning');
+        }
+        
+        // Start data streaming
+        async function startDataStream(sessionId, streamType, options = {}) {
+            try {
+                const response = await fetch('/api/stream/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        stream_type: streamType,
+                        batch_size: options.batchSize || 50,
+                        max_results: options.maxResults || 1000,
+                        filters: options.filters || {},
+                        real_time: options.realTime || true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStreamingStatus(`Started ${streamType} stream`, 'success');
+                    return data.data.stream_id;
+                } else {
+                    throw new Error(data.error?.message || 'Failed to start stream');
+                }
+                
+            } catch (error) {
+                console.error('Failed to start data stream:', error);
+                showStreamingStatus('Failed to start stream: ' + error.message, 'error');
+                return null;
+            }
+        }
+        
+        // Enhanced initialization to include WebSocket
+        const originalInitializeApp = initializeApp;
+        initializeApp = async function() {
+            await originalInitializeApp();
+            
+            // Initialize WebSocket if we have a session ID
+            const params = parseURLParameters();
+            if (params.session_id && !params.error) {
+                setTimeout(() => {
+                    initializeWebSocket(params.session_id);
+                }, 1000); // Small delay to ensure UI is ready
+            }
+        };
+
+        // Expose streaming functions for debugging
         window.SCPDebug = {
             parseURLParameters,
             showSuccessStatus,
             showErrorStatus,
-            clearURLParameters
+            clearURLParameters,
+            initializeWebSocket,
+            startDataStream,
+            socket: () => socket,
+            streamingEnabled: () => streamingEnabled
         };
     </script>
 </body>

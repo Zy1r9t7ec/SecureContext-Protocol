@@ -1,0 +1,27 @@
+{
+  "name": "Test Runner",
+  "description": "Automatically runs tests when Python files are saved",
+  "trigger": {
+    "event": "file_save",
+    "patterns": ["*.py"],
+    "exclude": ["**/test_*.py", "**/*_test.py"]
+  },
+  "agent": {
+    "prompt": "Run the appropriate tests for the modified file. If it's a core authentication file, run OAuth tests. If it's SDK code, run integration tests. Provide a summary of test results.",
+    "context": [
+      "#File",
+      "#Problems"
+    ]
+  },
+  "conditions": {
+    "file_exists": ["tests/", "dev/tests/"]
+  },
+  "actions": {
+    "on_success": {
+      "notification": "✅ Tests passed for {{file_name}}"
+    },
+    "on_failure": {
+      "notification": "❌ Tests failed for {{file_name}} - check output"
+    }
+  }
+}
