@@ -269,7 +269,7 @@
     <script>
         {% if providers -%}
         window.serverProviders = {{ providers | tojson }};
-        {%- endif %}
+        {% - endif %}
     </script>
 
     <a href="#main-content" class="skip-link">Skip to main content</a>
